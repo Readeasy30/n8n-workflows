@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "parameters": {"path": "ai-pipeline", "options": {}},
+      "id": "trigger-webhook",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Analyze this text and extract key action items: {{ $json.body.text }}"
+      },
+      "id": "chatgpt-node",
+      "name": "OpenAI ChatGPT",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "gemini-pro",
+        "prompt": "Take this summary from ChatGPT and rewrite it as formal markdown: {{ $json.choices.message.content }}"
+      },
+      "id": "gemini-node",
+      "name": "Google Gemini",
+      "type": "n8n-nodes-base.googleGemini",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "fileToWrite": "/data/output/ai_output.txt",
+        "fileContent": "=== NEW PIPELINE RUN ===\nTimestamp: {{ new Date().toISOString() }}\n\n{{ $json.candidates.content.parts.text }}\n\n========================\n",
+        "appendToFile": true
+      },
+      "id": "write-file-node",
+      "name": "Write Binary File",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {"main": [[{"node": "OpenAI ChatGPT", "type": "main", "index": 0}]]},
+    "OpenAI ChatGPT": {"main": [[{"node": "Google Gemini", "type": "main", "index": 0}]]},
+    "Google Gemini": {"main": [[{"node": "Write Binary File", "type": "main", "index": 0}]]}
+  }
+}
