@@ -6,7 +6,7 @@
       "name": "Webhook Trigger",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [250, 300]
+      "position":
     },
     {
       "parameters": {
@@ -17,7 +17,7 @@
       "name": "OpenAI ChatGPT",
       "type": "n8n-nodes-base.openAi",
       "typeVersion": 1,
-      "position": [450, 300]
+      "position":
     },
     {
       "parameters": {
@@ -28,7 +28,7 @@
       "name": "Google Gemini",
       "type": "n8n-nodes-base.googleGemini",
       "typeVersion": 1,
-      "position": [650, 300]
+      "position":
     },
     {
       "parameters": {
@@ -40,7 +40,7 @@
       "name": "Write Binary File",
       "type": "n8n-nodes-base.writeBinaryFile",
       "typeVersion": 1,
-      "position": [850, 300]
+      "position":
     }
   ],
   "connections": {
