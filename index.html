@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Global AI Pipeline Control Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #ffffff; text-align: center; padding-top: 50px; }
+        .card { background: #1e1e1e; border: 1px solid #333; border-radius: 8px; width: 450px; margin: 0 auto; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        textarea { width: 100%; height: 100px; background: #2d2d2d; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 10px; box-sizing: border-box; resize: vertical; margin-bottom: 20px; }
+        button { background: #007acc; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #0062a3; }
+        #status { margin-top: 20px; font-weight: bold; color: #00ffcc; word-wrap: break-word; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>?? Cross-Machine AI Control Panel</h2>
+        <p style="color: #aaa; font-size: 13px;">Fires payloads securely through your Cloudflare Tunnel infrastructure.</p>
+        
+        <textarea id="promptInput" placeholder="Type instructions or data for your models here...">Process unified automated multi-machine deployment models.</textarea>
+        
+        <!-- THE PHYSICAL BUTTON -->
+        <button onclick="triggerPipeline()">?? Start AI Pipeline</button>
+        
+        <div id="status">System Idle - Awaiting Trigger</div>
+    </div>
+
+    <script>
+        function triggerPipeline() {
+            const statusDiv = document.getElementById('status');
+            const payloadText = document.getElementById('promptInput').value;
+            statusDiv.innerText = "? Pinging Cloudflare Tunnel Endpoint...";
+
+            // Dynamically detects if running locally or replaces with your public domain path
+            const tunnelUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:5678/webhook/ai-pipeline'
+                : `https://${window.location.hostname}/webhook/ai-pipeline`;
+
+            fetch(tunnelUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: payloadText })
+            })
+            .then(response => {
+                if(response.ok) {
+                    statusDiv.innerHTML = "? Execution Sent Successfully!<br><span style='color:#aaa; font-size:11px;'>Payload processed by orchestration hub.</span>";
+                } else {
+                    statusDiv.style.color = "#ff3333";
+                    statusDiv.innerText = "? Connection Refused (Check Tunnel/Keys)";
+                }
+            })
+            .catch(err => {
+                statusDiv.style.color = "#ff3333";
+                statusDiv.innerText = "? Network Error: " + err.message;
+            });
+        }
+    </script>
+</body>
+</html>
