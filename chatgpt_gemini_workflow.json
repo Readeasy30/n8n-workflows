@@ -1,51 +1,48 @@
 {
+  "id": "1",
+  "name": "Local Open Source AI Pipeline",
   "nodes": [
     {
-      "parameters": {"path": "ai-pipeline", "options": {}},
-      "id": "trigger-webhook",
+      "parameters": {
+        "path": "ai-pipeline",
+        "options": {}
+      },
+      "id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
       "name": "Webhook Trigger",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position":
+      "position": [100, 200]
     },
     {
       "parameters": {
-        "model": "gpt-4o",
+        "model": "llama3:latest",
         "prompt": "Analyze this text and extract key action items: {{ $json.body.text }}"
       },
-      "id": "chatgpt-node",
-      "name": "OpenAI ChatGPT",
-      "type": "n8n-nodes-base.openAi",
+      "id": "b2c3d4e5-f67a-8b9c-0d1e-2f3a4b5c6d7e",
+      "name": "Local OpenSource LLM",
+      "type": "n8n-nodes-base.ollama",
       "typeVersion": 1,
-      "position":
-    },
-    {
-      "parameters": {
-        "model": "gemini-pro",
-        "prompt": "Take this summary from ChatGPT and rewrite it as formal markdown: {{ $json.choices.message.content }}"
-      },
-      "id": "gemini-node",
-      "name": "Google Gemini",
-      "type": "n8n-nodes-base.googleGemini",
-      "typeVersion": 1,
-      "position":
+      "position": [300, 200]
     },
     {
       "parameters": {
         "fileToWrite": "/data/output/ai_output.txt",
-        "fileContent": "=== NEW PIPELINE RUN ===\nTimestamp: {{ new Date().toISOString() }}\n\n{{ $json.candidates.content.parts.text }}\n\n========================\n",
+        "fileContent": "=== NEW LOCAL PIPELINE RUN ===\nTimestamp: {{ new Date().toISOString() }}\n\n{{ $json.alternativeText || $json.text }}\n\n========================\n",
         "appendToFile": true
       },
-      "id": "write-file-node",
+      "id": "d4e5f67a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
       "name": "Write Binary File",
       "type": "n8n-nodes-base.writeBinaryFile",
       "typeVersion": 1,
-      "position":
+      "position": [500, 200]
     }
   ],
   "connections": {
-    "Webhook Trigger": {"main": [[{"node": "OpenAI ChatGPT", "type": "main", "index": 0}]]},
-    "OpenAI ChatGPT": {"main": [[{"node": "Google Gemini", "type": "main", "index": 0}]]},
-    "Google Gemini": {"main": [[{"node": "Write Binary File", "type": "main", "index": 0}]]}
+    "Webhook Trigger": {
+      "main": [[{"node": "Local OpenSource LLM", "type": "main", "index": 0}]]
+    },
+    "Local OpenSource LLM": {
+      "main": [[{"node": "Write Binary File", "type": "main", "index": 0}]]
+    }
   }
 }
